@@ -41,7 +41,7 @@ class RemoveBg:
         select = [std[0] - sigmoi*std[1], std[0] + sigmoi*std[1]]
         mask = 255 - cv2.inRange(hsv, select[0], select[1])
         
-        return mask
+        return img, mask
 
     def calc_energy(self, img):
         filter_du = np.array([
