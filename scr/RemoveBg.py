@@ -3,6 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import urllib.request as get
 
+Algorithm = {
+    'GD':1,
+    'Canny' : 2,
+    'Laplacian':3,
+}
+
 class RemoveBg:
     """
     Remove Background 🌲
@@ -13,25 +19,30 @@ class RemoveBg:
         self.disc = lambda d: cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (d, d))
         pass
 
-    def remove_background(self, url, sigmoi):
+    def remove_background(self, img, algorithm ,sigmoi):
         """
         url: path to file 👉
         sigmoi: value of sigmoi for all channels 
         """
-
-        img = self.url_to_image(url)
-
         grace = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-        # find edge        
-        gd = self.calc_energy(img)
-        _, gd = cv2.threshold(gd, 127, 255, cv2.THRESH_BINARY)
-        gd = np.uint8(gd)
-        gd = cv2.morphologyEx(gd, cv2.MORPH_OPEN, self.disc(5))
+        # find edge  
+        if algorithm == Algorithm['GD']:
+            edge = self.calc_energy(img)
+            _, edge = cv2.threshold(edge, 127, 255, cv2.THRESH_BINARY)
+            edge = np.uint8(edge)
+            edge = cv2.morphologyEx(edge, cv2.MORPH_OPEN, (10,10))
+        elif algorithm == Algorithm['Canny']:
+            edge = cv2.Canny(grace, 120, 255)
+        else:
+            grace = cv2.GaussianBlur(grace, (3,3), 0)
+            edge = cv2.Laplacian(grace,cv2.CV_16S,ksize=3)
+            edge = cv2.convertScaleAbs(edge)
+            edge = cv2.morphologyEx(edge, cv2.MORPH_OPEN, (10,10))
         
         # localize biggest rectangle that contain all edge
-        x,y,w,h = cv2.boundingRect(gd)
+        x,y,w,h = cv2.boundingRect(edge)
         mask = np.ones(grace.shape, np.uint8) * 255
         cv2.rectangle(mask, (x,y),(x+w, y+h), 0, -1)
 
