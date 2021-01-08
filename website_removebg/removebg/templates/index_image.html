@@ -1,46 +1,67 @@
-<head>
-    <meta charset="utf-8">
-    <title>Những cậu bạn dễ thương</title>
-</head>
-<body>
+<!DOCTYPE html>
+<html lang="en">
 
-    <form method="post" action="{% url 'result_image' %}">
-        {% csrf_token %}
-        <label>Your object url</label>
-        <br>
-        <input type="text" name="obj_link">
-        <br>
-        <label>Your background url</label>
-        <br>
-        <input type="text" name="bg_link">
-        <br>
-        <text>Choose algorithm</text>
-        <br>
-        <input list="browsers" name="algo">
-        <datalist id="browsers">
-          <option value="Canny">
-          <option value="Image derivatives">
-          <option value="Laplacian">
-        </datalist>
-        <br>
-        <input type="submit" value="Remove Background">
-    </form>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+    <title>Image</title>
+</head>
+
+<body>
+    <div id="container">
+        <form method="post" action="{% url 'result_image' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Your object url</label>
+                <input type="text" name="obj_link" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Your background url</label>
+                <input type="text" name="bg_link" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <text>Choose algorithm</text>
+                <input list="browsers" name="algo" class="form-control">
+                <datalist id="browsers">
+                    <option value="Canny">
+                    <option value="Image derivatives">
+                    <option value="Laplacian">
+                </datalist>
+            </div>
+            <input type="submit" value="Remove Background" class="btn btn-primary">
+        </form>
+    </div>
     <div>
-        <style>
-            form {
-                padding-left: 50px;
-            }
-        </style>
         {% if obj_link != Null %}
         <ul>
             <li>Object Image <br> <img src={{obj_link}} height="300px"></li>
             <li>Background Image <br> <img src={{bg_link}} height="300px"></li>
             {% if img_path != Null %}
-                {% load static %}
-                    <li>Result <br> <img src="{% static img_path %}" height="300px"></li>
+            {% load static %}
+            <li>Result <br> <img src="{% static img_path %}" height="300px"></li>
             {% endif %}
         </ul>
         {% endif %}
     </div>
-
 </body>
+<style>
+    body {
+        box-sizing: border-box;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+</html>

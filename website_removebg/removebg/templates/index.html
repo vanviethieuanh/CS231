@@ -1,14 +1,43 @@
 <!doctype html>
 
+<head>
+    <title>Chroma-key</title>
+    <meta charset=utf-8>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👺</text></svg>">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 
-<head><title>Test</title> 
-    <meta charset=utf-8> </head>
-    <body>
-        <h1>My Website</h1>
-        <!-- <form action="/my-link/">
-            <input type="submit" value="Click me" name="" />
-        </form> -->
-        <button> <a href="/removebgimage/">Image</a></button>
-        <button> <a href="/removebgvideo/">Video</a></button>
+<body>
+    <div id="container">
+        <div>
+            <h3>Remove Chroma-key</h3>
+            <!-- <form action="/my-link/">
+                    <input type="submit" value="Click me" name="" />
+                </form> -->
+            <div class="d-flex p-2 justify-content-around">
+                <div>
+                    <a href="/removebgimage/" class="btn btn-primary">Image</a>
+                </div>
+                <div>
+                    <a href="/removebgvideo/" class="btn btn-primary">Video</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </body>
+    <style>
+        body {
+            box-sizing: border-box;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</body>
