@@ -4,7 +4,7 @@ import numpy as np
 import urllib.request as get
 
 Algorithm = {
-    'GD':1,
+    'GD': 1,
     'Canny' : 2,
     'Laplacian':3,
 }

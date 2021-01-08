@@ -1,0 +1,46 @@
+<head>
+    <meta charset="utf-8">
+    <title>Những cậu bạn dễ thương</title>
+</head>
+<body>
+
+    <form method="post" action="{% url 'result_image' %}">
+        {% csrf_token %}
+        <label>Your object url</label>
+        <br>
+        <input type="text" name="obj_link">
+        <br>
+        <label>Your background url</label>
+        <br>
+        <input type="text" name="bg_link">
+        <br>
+        <text>Choose algorithm</text>
+        <br>
+        <input list="browsers" name="algo">
+        <datalist id="browsers">
+          <option value="Canny">
+          <option value="Image derivatives">
+          <option value="Laplacian">
+        </datalist>
+        <br>
+        <input type="submit" value="Remove Background">
+    </form>
+    <div>
+        <style>
+            form {
+                padding-left: 50px;
+            }
+        </style>
+        {% if obj_link != Null %}
+        <ul>
+            <li>Object Image <br> <img src={{obj_link}} height="300px"></li>
+            <li>Background Image <br> <img src={{bg_link}} height="300px"></li>
+            {% if img_path != Null %}
+                {% load static %}
+                    <li>Result <br> <img src="{% static img_path %}" height="300px"></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+
+</body>
