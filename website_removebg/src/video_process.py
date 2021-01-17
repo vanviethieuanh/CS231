@@ -3,6 +3,7 @@ import RemoveBg as rm
 import cv2
 import numpy as np
 
+
 def cal_hist(img_vec):
     hist = np.zeros(256, np.int)
     values, counts = np.unique(img_vec, return_counts=True)
@@ -10,9 +11,12 @@ def cal_hist(img_vec):
         hist[val] = counts[i]
     return hist
 
+
 def lerp(v0, v1, t):
     return (1-t)*v0+t*v1
-def process_video(video_object_path = None, background_path = None):
+
+
+def process_video(video_object_path=None, background_path=None):
 
     if video_object_path == None:
         cap = cv2.VideoCapture(0)
@@ -23,20 +27,21 @@ def process_video(video_object_path = None, background_path = None):
         ret, frame = cap.read()
 
         # Our operations on the frame come here
-        obj, mask = rm.RemoveBg().remove_background(frame, rm.Algorithm['Canny'], 6)
-        result = add.AddBg(obj,mask,background_path,0.8)
+        obj, mask = rm.RemoveBg().remove_background(
+            frame, rm.Algorithm['Canny'], 6)
+        result = add.AddBg(obj, mask, background_path, 0.8)
         # Bước 2: Covert sang hệ màu HSL
-        hsl = cv2.cvtColor(result, cv2.COLOR_BGR2HSL)
-        mean = cv2.meanStdDev(rm.RemoveBg().url_to_image(background_path))
-        obj_mean =  cv2.meanStdDev(frame, mask)
+        # hsl = cv2.cvtColor(result, cv2.COLOR_BGR2HSL)
+        # mean = cv2.mean(rm.RemoveBg().url_to_image(background_path))
+        # obj_mean =  cv2.mean(frame, mask)
 
-        mean_dis = mean - obj_mean
+        # mean_dis = mean - obj_mean
 
-        t = 0.2
-        lightness = (1-t)*hsl[:,:, 2] + t*mean_dis[2]
-        lightness = np.uint8(lightness)
+        # t = 0.2
+        # lightness = hsl[:,:, 2] + t*mean_dis[2]
+        # lightness = np.uint8(lightness)
 
-        img_result = cv2.merge((hsl[:,:,0], hsl[:, :, 1], lightness))
+        # img_result = cv2.merge((hsl[:,:,0], hsl[:, :, 1], lightness))
 
         # # Bước 3: Cân bằng histogram cho kênh V --> V*
         # value_vec = value.reshape(-1)
@@ -61,13 +66,10 @@ def process_video(video_object_path = None, background_path = None):
         # # Bước 4: Ráp lại thành kênh màu HSL*
         # hsv[:, :, 2] = value_eq
         # Bước 5: Convert về RGB
-        img_result = cv2.cvtColor(img_result, cv2.COLOR_HSL2BGR)
-
-
-
+        # img_result = cv2.cvtColor(img_result, cv2.COLOR_HSL2BGR)
 
         # Display the resulting frame
-        cv2.imshow('frame', img_result)
+        cv2.imshow('frame', result)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -75,4 +77,6 @@ def process_video(video_object_path = None, background_path = None):
     cap.release()
     cv2.destroyAllWindows()
 
-process_video(video_object_path = 'GREEN_SCREEN_ANIMALS__ALPACA.mov', background_path='https://png.pngtree.com/thumb_back/fw800/back_pic/04/19/67/44582c6d6aa377e.jpg')
+
+process_video(video_object_path='GREEN_SCREEN_ANIMALS__ALPACA.mov',
+              background_path='https://png.pngtree.com/thumb_back/fw800/back_pic/04/19/67/44582c6d6aa377e.jpg')
