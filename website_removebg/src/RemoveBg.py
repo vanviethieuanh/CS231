@@ -60,7 +60,7 @@ class RemoveBg:
 
         return img, mask
 
-    def calc_energy(self, img):
+    def calc_energy(self, img):     
         filter_du = np.array([
             [1.0, 2.0, 1.0],
             [0.0, 0.0, 0.0],
