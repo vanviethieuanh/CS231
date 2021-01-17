@@ -25,16 +25,18 @@ def process_video(video_object_path = None, background_path = None):
         # Our operations on the frame come here
         obj, mask = rm.RemoveBg().remove_background(frame, rm.Algorithm['Canny'], 6)
         result = add.AddBg(obj,mask,background_path,0.8)
-        # Bước 2: Covert sang hệ màu HSV
-        hsv = cv2.cvtColor(result, cv2.COLOR_BGR2HSV)
-        mean = cv2.mean(rm.RemoveBg().url_to_image(background_path))
-        
-        print(mean)
+        # Bước 2: Covert sang hệ màu HSL
+        hsl = cv2.cvtColor(result, cv2.COLOR_BGR2HSL)
+        mean = cv2.meanStdDev(rm.RemoveBg().url_to_image(background_path))
+        obj_mean =  cv2.meanStdDev(frame, mask)
+
+        mean_dis = mean - obj_mean
+
         t = 0.2
-        value = (1-t)*hsv[:,:, 2] + t*mean[2]
-        value = np.uint8(value)
-        
-        img_result = cv2.merge((hsv[:,:,0], hsv[:, :, 1], value))
+        lightness = (1-t)*hsl[:,:, 2] + t*mean_dis[2]
+        lightness = np.uint8(lightness)
+
+        img_result = cv2.merge((hsl[:,:,0], hsl[:, :, 1], lightness))
 
         # # Bước 3: Cân bằng histogram cho kênh V --> V*
         # value_vec = value.reshape(-1)
@@ -56,10 +58,10 @@ def process_video(video_object_path = None, background_path = None):
         # hist = cal_hist(value_vec)
         # # plt.bar(range(0,256), hist)
 
-        # # Bước 4: Ráp lại thành kênh màu HSV*
+        # # Bước 4: Ráp lại thành kênh màu HSL*
         # hsv[:, :, 2] = value_eq
         # Bước 5: Convert về RGB
-        img_result = cv2.cvtColor(img_result, cv2.COLOR_HSV2BGR)
+        img_result = cv2.cvtColor(img_result, cv2.COLOR_HSL2BGR)
 
 
 
