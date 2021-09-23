@@ -2,6 +2,8 @@
 
 Remove chroma-key backgrounds by survey ROI (which found by edge detection)
 
+Done the course after Jun 2020
+
 ### Usage
 
 ``` bash
